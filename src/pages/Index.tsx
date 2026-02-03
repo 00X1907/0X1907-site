@@ -1,11 +1,24 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { TopBar } from "@/components/blog/TopBar";
+import { Sidebar } from "@/components/blog/Sidebar";
+import { BlogContent } from "@/components/blog/BlogContent";
+import { blogPosts } from "@/data/blogPosts";
 
 const Index = () => {
+  const [activePostId, setActivePostId] = useState(blogPosts[0]?.id || "intro");
+
+  const activePost = blogPosts.find((post) => post.id === activePostId) || blogPosts[0];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="flex flex-col h-screen">
+      <TopBar />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar
+          posts={blogPosts}
+          activePostId={activePostId}
+          onSelectPost={setActivePostId}
+        />
+        {activePost && <BlogContent post={activePost} />}
       </div>
     </div>
   );
