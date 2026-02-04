@@ -63,30 +63,30 @@ export const TableOfContents = ({ content }: TableOfContentsProps) => {
   }
 
   return (
-    <nav className="hidden lg:block w-[200px] shrink-0 mr-8">
-      <div className="sticky top-[100px] animate-fade-in">
-        <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4">
+    <nav className="hidden lg:block w-[180px] xl:w-[200px] shrink-0">
+      <div className="sticky top-[100px]">
+        <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 animate-fade-in">
           <Menu className="w-3.5 h-3.5" />
           <span>On This Page</span>
         </div>
-        <ul className="space-y-1 border-l border-border">
+        <ul className="space-y-0.5 border-l border-border">
           {headings.map((heading, index) => (
             <li 
               key={heading.id}
               className="animate-fade-in"
-              style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'both' }}
+              style={{ animationDelay: `${index * 60}ms`, animationFillMode: 'both' }}
             >
               <button
                 onClick={() => handleClick(heading.id)}
                 className={cn(
                   "block w-full text-left text-[13px] py-1.5 border-l-2 -ml-px",
-                  "transition-all duration-300 ease-out",
-                  heading.level === 1 && "pl-3",
-                  heading.level === 2 && "pl-3",
-                  heading.level === 3 && "pl-6",
+                  "transition-all duration-200 ease-out",
+                  heading.level === 1 && "pl-4",
+                  heading.level === 2 && "pl-4",
+                  heading.level === 3 && "pl-7",
                   activeId === heading.id
-                    ? "border-foreground text-foreground font-medium translate-x-0.5"
-                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground hover:translate-x-0.5"
+                    ? "border-foreground text-foreground font-medium"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50"
                 )}
               >
                 {heading.text}
