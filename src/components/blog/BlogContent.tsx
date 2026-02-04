@@ -70,9 +70,9 @@ const renderContentBlock = (block: ContentBlock, index: number) => {
 
 export const BlogContent = ({ post }: BlogContentProps) => {
   return (
-    <main className="flex-1 py-8 md:py-[60px] px-4 md:px-20 overflow-y-auto bg-background">
-      <div className="flex justify-center gap-16 lg:gap-24">
-        <article className="max-w-[700px] blog-prose flex-1">
+    <main className="flex-1 py-8 md:py-[60px] px-4 md:px-8 lg:px-20 overflow-y-auto overflow-x-hidden bg-background">
+      <div className="flex justify-start lg:justify-center gap-8 lg:gap-24 max-w-full">
+        <article className="max-w-full lg:max-w-[700px] blog-prose flex-1 min-w-0">
           <h1>{post.title}</h1>
           {post.date && (
             <p className="text-muted-foreground text-sm mb-6 mt-[-16px]">
