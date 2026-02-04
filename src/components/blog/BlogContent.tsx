@@ -1,4 +1,5 @@
 import { CodeBlock } from "./CodeBlock";
+import { TableOfContents, generateId } from "./TableOfContents";
 import type { BlogPost, ContentBlock } from "@/data/blogPosts";
 
 interface BlogContentProps {
@@ -12,7 +13,12 @@ const renderContentBlock = (block: ContentBlock, index: number) => {
     
     case "heading":
       const HeadingTag = `h${block.level || 2}` as keyof JSX.IntrinsicElements;
-      return <HeadingTag key={index}>{block.content}</HeadingTag>;
+      const headingId = generateId(block.content || "");
+      return (
+        <HeadingTag key={index} id={headingId}>
+          {block.content}
+        </HeadingTag>
+      );
     
     case "code":
       return (
@@ -65,15 +71,18 @@ const renderContentBlock = (block: ContentBlock, index: number) => {
 export const BlogContent = ({ post }: BlogContentProps) => {
   return (
     <main className="flex-1 py-8 md:py-[60px] px-4 md:px-20 overflow-y-auto bg-background">
-      <article className="max-w-[700px] mx-auto md:mx-0 blog-prose">
-        <h1>{post.title}</h1>
-        {post.date && (
-          <p className="text-muted-foreground text-sm mb-6 mt-[-16px]">
-            {post.date}
-          </p>
-        )}
-        {post.content.map((block, index) => renderContentBlock(block, index))}
-      </article>
+      <div className="flex gap-12">
+        <article className="max-w-[700px] mx-auto md:mx-0 blog-prose flex-1">
+          <h1>{post.title}</h1>
+          {post.date && (
+            <p className="text-muted-foreground text-sm mb-6 mt-[-16px]">
+              {post.date}
+            </p>
+          )}
+          {post.content.map((block, index) => renderContentBlock(block, index))}
+        </article>
+        <TableOfContents content={post.content} />
+      </div>
     </main>
   );
 };
