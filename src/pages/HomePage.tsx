@@ -41,9 +41,9 @@ const HomePage = () => {
               in complex reasoning tasks.
             </p>
             <p className="text-muted-foreground text-sm">
-              PhD Candidate · AI Research Lab · 
-              <a href="mailto:lohith@example.com" className="ml-1 underline underline-offset-4 hover:text-foreground transition-colors">
-                lohith@example.com
+              Automation Practitioner · Systems Thinker · 
+              <a href="mailto:lsrikar@gmail.com" className="ml-1 underline underline-offset-4 hover:text-foreground transition-colors">
+                lsrikar@gmail.com
               </a>
             </p>
           </section>
