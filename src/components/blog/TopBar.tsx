@@ -5,9 +5,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 interface TopBarProps {
   sidebarOpen?: boolean;
   onToggleSidebar?: () => void;
+  showMenuButton?: boolean;
 }
 
-export const TopBar = ({ sidebarOpen, onToggleSidebar }: TopBarProps) => {
+export const TopBar = ({ sidebarOpen, onToggleSidebar, showMenuButton = true }: TopBarProps) => {
   const { theme, toggleTheme } = useTheme();
   const isMobile = useIsMobile();
 
@@ -15,7 +16,7 @@ export const TopBar = ({ sidebarOpen, onToggleSidebar }: TopBarProps) => {
     <header className="h-[52px] border-b border-border flex items-center justify-between px-4 md:px-5 bg-topbar-bg z-50">
       <div className="flex items-center gap-3">
         {/* Mobile menu toggle */}
-        {isMobile && onToggleSidebar && (
+        {showMenuButton && isMobile && onToggleSidebar && (
           <button
             onClick={onToggleSidebar}
             className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-hover-bg transition-colors"

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { TopBar } from "@/components/blog/TopBar";
 import { Sidebar } from "@/components/blog/Sidebar";
 import { BlogContent } from "@/components/blog/BlogContent";
@@ -6,6 +7,8 @@ import { loadMarkdownPosts, type BlogPost } from "@/data/blogPosts";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
+  const { postId } = useParams();
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [activePostId, setActivePostId] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -17,7 +20,10 @@ const Index = () => {
       try {
         const loadedPosts = await loadMarkdownPosts();
         setPosts(loadedPosts);
-        if (loadedPosts.length > 0) {
+        // If postId is provided in URL, use it; otherwise use first post
+        if (postId && loadedPosts.some(p => p.id === postId)) {
+          setActivePostId(postId);
+        } else if (loadedPosts.length > 0) {
           setActivePostId(loadedPosts[0].id);
         }
       } catch (error) {
@@ -28,7 +34,7 @@ const Index = () => {
     };
 
     loadPosts();
-  }, []);
+  }, [postId]);
 
   // Close sidebar on mobile by default
   useEffect(() => {
@@ -39,8 +45,9 @@ const Index = () => {
     }
   }, [isMobile]);
 
-  const handleSelectPost = (postId: string) => {
-    setActivePostId(postId);
+  const handleSelectPost = (id: string) => {
+    setActivePostId(id);
+    navigate(`/blog/${id}`);
     // Close sidebar on mobile after selecting a post
     if (isMobile) {
       setSidebarOpen(false);
