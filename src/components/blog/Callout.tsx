@@ -65,7 +65,7 @@
          </span>
        </div>
        {/* Body */}
-       <div className="px-4 py-3 text-[15px] leading-relaxed text-foreground/90 bg-muted/30">
+       <div className="px-4 py-3 text-[15px] leading-relaxed text-foreground/90 bg-muted/30 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:bg-background/60 [&_code]:text-[13px] [&_code]:font-mono">
          {children}
        </div>
      </div>
