@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>0x1907</title>
+    <link>https://0x1907.netlify.app</link>
+    <description>A blog about programming, systems, and engineering</description>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Feb 2026 17:10:59 GMT</lastBuildDate>
+    <atom:link href="https://0x1907.netlify.app/rss.xml" rel="self" type="application/rss+xml"/>
+    
+    <item>
+      <title>Building a Modern CLI in Rust</title>
+      <link>https://0x1907.netlify.app/blog/rust-cli</link>
+      <guid>https://0x1907.netlify.app/blog/rust-cli</guid>
+      <description>
+Building command-line tools is one of the most satisfying programming experiences. In this guide, we&apos;ll build a powerful file organizer CLI from scratch using Rust....</description>
+      <category>Systems Programming</category>
+      <pubDate>Wed, 04 Feb 2026 18:30:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>The Art of Debugging</title>
+      <link>https://0x1907.netlify.app/blog/debugging-mastery</link>
+      <guid>https://0x1907.netlify.app/blog/debugging-mastery</guid>
+      <description>
+Debugging is where good developers become great. It&apos;s not just about fixing bugs—it&apos;s about understanding systems deeply. Let&apos;s master the techniques that professionals use....</description>
+      <category>Engineering</category>
+      <pubDate>Tue, 03 Feb 2026 18:30:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>RESTful API Design Guide</title>
+      <link>https://0x1907.netlify.app/blog/api-design</link>
+      <guid>https://0x1907.netlify.app/blog/api-design</guid>
+      <description>
+Great APIs are invisible—they just work. Bad APIs create friction, bugs, and frustrated developers. This guide covers the principles that separate elegant APIs from frustrating ones....</description>
+      <category>Backend</category>
+      <pubDate>Mon, 02 Feb 2026 18:30:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Terminal Power User Guide</title>
+      <link>https://0x1907.netlify.app/blog/terminal-power</link>
+      <guid>https://0x1907.netlify.app/blog/terminal-power</guid>
+      <description>
+The terminal is the ultimate power tool. While others click through GUIs, you&apos;ll be automating tasks, processing data, and managing systems at the speed of thought....</description>
+      <category>Productivity</category>
+      <pubDate>Sun, 01 Feb 2026 18:30:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
