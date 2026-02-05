@@ -13,6 +13,15 @@ interface BlogContentProps {
   post: BlogPost;
 }
 
+// Helper to render text with inline code (backticks)
+const renderInlineCode = (text: string): React.ReactNode => {
+  if (!text.includes("`")) return text;
+  
+  return text.split("`").map((part, i) =>
+    i % 2 === 0 ? part : <code key={i}>{part}</code>
+  );
+};
+
 export const BlogContent = ({ post }: BlogContentProps) => {
   const [previewImage, setPreviewImage] = useState<{ src: string; alt?: string } | null>(null);
 
@@ -97,7 +106,7 @@ export const BlogContent = ({ post }: BlogContentProps) => {
                         i !== 0 && "border-l border-border"
                       )}
                     >
-                      {header}
+                      {renderInlineCode(header)}
                     </th>
                   ))}
                 </tr>
@@ -116,7 +125,7 @@ export const BlogContent = ({ post }: BlogContentProps) => {
                           cellIndex !== 0 && "border-l border-border"
                         )}
                       >
-                        {cell}
+                        {renderInlineCode(cell)}
                       </td>
                     ))}
                   </tr>
@@ -133,7 +142,7 @@ export const BlogContent = ({ post }: BlogContentProps) => {
             variant={block.calloutVariant || "note"}
             title={block.calloutTitle || "Note"}
           >
-            {block.content}
+            {renderInlineCode(block.content || "")}
           </Callout>
         );
       

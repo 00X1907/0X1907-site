@@ -152,22 +152,25 @@ function parseMarkdownToBlocks(markdown: string): ContentBlock[] {
         i++;
       }
 
+      // Helper to split table row handling escaped pipes
+      const splitTableRow = (row: string): string[] => {
+        // Replace escaped pipes with placeholder, split, then restore
+        const placeholder = "\x00PIPE\x00";
+        return row
+          .slice(1, -1)
+          .replace(/\\\|/g, placeholder)
+          .split("|")
+          .map((cell) => cell.trim().replace(new RegExp(placeholder, "g"), "|"));
+      };
+
       if (tableLines.length >= 2) {
         // Parse header row
-        const headerLine = tableLines[0];
-        const headers = headerLine
-          .slice(1, -1)
-          .split("|")
-          .map((cell) => cell.trim());
+        const headers = splitTableRow(tableLines[0]);
 
         // Skip separator row (index 1) and parse data rows
         const rows: string[][] = [];
         for (let r = 2; r < tableLines.length; r++) {
-          const rowCells = tableLines[r]
-            .slice(1, -1)
-            .split("|")
-            .map((cell) => cell.trim());
-          rows.push(rowCells);
+          rows.push(splitTableRow(tableLines[r]));
         }
 
         blocks.push({
