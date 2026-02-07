@@ -33,7 +33,7 @@ export const TopBar = ({ sidebarOpen, onToggleSidebar, showMenuButton = true, sh
           </button>
         )}
         <a href="/" className="font-semibold text-sm text-foreground no-underline">
-          0x1970
+          U1970
         </a>
       </div>
 
