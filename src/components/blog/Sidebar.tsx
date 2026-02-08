@@ -1,17 +1,17 @@
 import { useState, useMemo, useEffect } from "react";
 import { Search, FileText, ChevronRight, ChevronLeft, Folder, FolderOpen, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { BlogPost } from "@/data/blogPosts";
+import type { PostMetadata } from "@/data/blogPosts";
 
 interface FolderNode {
   name: string;
   path: string;
   subfolders: Record<string, FolderNode>;
-  posts: BlogPost[];
+  posts: PostMetadata[];
 }
 
 interface SidebarProps {
-  posts: BlogPost[];
+  posts: PostMetadata[];
   activePostId: string;
   onSelectPost: (postId: string) => void;
   isOpen?: boolean;
@@ -47,7 +47,7 @@ export const Sidebar = ({ posts, activePostId, onSelectPost, isOpen = true, init
       }
       acc[post.category].push(post);
       return acc;
-    }, {} as Record<string, BlogPost[]>);
+    }, {} as Record<string, PostMetadata[]>);
   }, [posts]);
 
   const categories = Object.keys(postsByCategory);

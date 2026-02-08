@@ -3,45 +3,68 @@ import { useParams, useNavigate } from "react-router-dom";
 import { TopBar } from "@/components/blog/TopBar";
 import { Sidebar } from "@/components/blog/Sidebar";
 import { BlogContent } from "@/components/blog/BlogContent";
-import { loadMarkdownPosts, type BlogPost } from "@/data/blogPosts";
+import { loadPostsMetadata, loadPostById, type BlogPost, type PostMetadata } from "@/data/blogPosts";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [postsMetadata, setPostsMetadata] = useState<PostMetadata[]>([]);
+  const [activePost, setActivePost] = useState<BlogPost | null>(null);
   const [activePostId, setActivePostId] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [postLoading, setPostLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isMobile = useIsMobile();
 
+  // Load metadata on mount
   useEffect(() => {
-    const loadPosts = async () => {
+    const loadMetadata = async () => {
       try {
-        const loadedPosts = await loadMarkdownPosts();
-        setPosts(loadedPosts);
-        // If postId is provided in URL, check if it exists
+        const metadata = await loadPostsMetadata();
+        setPostsMetadata(metadata);
+        
+        // Determine which post to show
         if (postId) {
-          if (loadedPosts.some(p => p.id === postId)) {
+          if (metadata.some(p => p.id === postId)) {
             setActivePostId(postId);
             setNotFound(false);
           } else {
             setNotFound(true);
           }
-        } else if (loadedPosts.length > 0) {
-          setActivePostId(loadedPosts[0].id);
+        } else if (metadata.length > 0) {
+          setActivePostId(metadata[0].id);
           setNotFound(false);
         }
       } catch (error) {
-        console.error("Failed to load posts:", error);
+        console.error("Failed to load posts metadata:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    loadPosts();
+    loadMetadata();
   }, [postId]);
+
+  // Load full post content when activePostId changes
+  useEffect(() => {
+    if (!activePostId) return;
+
+    const loadPost = async () => {
+      setPostLoading(true);
+      try {
+        const post = await loadPostById(activePostId);
+        setActivePost(post);
+      } catch (error) {
+        console.error("Failed to load post:", error);
+      } finally {
+        setPostLoading(false);
+      }
+    };
+
+    loadPost();
+  }, [activePostId]);
 
   // Close sidebar on mobile by default
   useEffect(() => {
@@ -61,14 +84,15 @@ const Index = () => {
     }
   };
 
-  const activePost = posts.find((post) => post.id === activePostId) || posts[0];
+  // Get active post metadata for sidebar folder
+  const activePostMeta = postsMetadata.find((post) => post.id === activePostId);
 
   if (loading) {
     return (
       <div className="flex flex-col h-screen">
         <TopBar sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} showTagsLink />
         <div className="flex flex-1 items-center justify-center">
-          <div className="text-muted-foreground">Loading posts...</div>
+          <div className="text-muted-foreground">Loading...</div>
         </div>
       </div>
     );
@@ -102,12 +126,12 @@ const Index = () => {
       <TopBar sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} showTagsLink />
       <div className="flex flex-1 overflow-hidden relative">
         <Sidebar
-          posts={posts}
+          posts={postsMetadata}
           activePostId={activePostId}
           onSelectPost={handleSelectPost}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
-          initialActiveFolder={activePost?.category ?? null}
+          initialActiveFolder={activePostMeta?.category ?? null}
         />
         {/* Overlay for mobile when sidebar is open */}
         {isMobile && sidebarOpen && (
@@ -116,7 +140,13 @@ const Index = () => {
             onClick={() => setSidebarOpen(false)}
           />
         )}
-        {activePost && <BlogContent post={activePost} />}
+        {postLoading ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-muted-foreground">Loading post...</div>
+          </div>
+        ) : activePost ? (
+          <BlogContent post={activePost} />
+        ) : null}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import type { BlogPost, ContentBlock } from "@/data/blogPosts";
+import type { BlogPost, ContentBlock, PostMetadata } from "@/data/blogPosts";
 
 interface FrontMatter {
   id: string;
@@ -307,4 +307,76 @@ export async function loadMarkdownPosts(): Promise<BlogPost[]> {
   });
 
   return posts;
+}
+
+// Cache for post modules to avoid re-importing
+const postModulesCache = import.meta.glob("/src/content/posts/*.md", {
+  query: "?raw",
+  import: "default",
+});
+
+/**
+ * Load only metadata (frontmatter) for all posts - lightweight for sidebar/listing
+ */
+export async function loadPostsMetadata(): Promise<PostMetadata[]> {
+  const posts: PostMetadata[] = [];
+
+  for (const path in postModulesCache) {
+    try {
+      const content = (await postModulesCache[path]()) as string;
+      const { frontMatter } = parseFrontMatter(content);
+      
+      const tags = frontMatter.tags 
+        ? frontMatter.tags.split(",").map(tag => tag.trim()).filter(Boolean)
+        : undefined;
+
+      posts.push({
+        id: frontMatter.id,
+        title: frontMatter.title,
+        category: frontMatter.category,
+        date: frontMatter.date,
+        tags,
+      });
+    } catch (error) {
+      console.error(`Error loading metadata from ${path}:`, error);
+    }
+  }
+
+  // Sort by date (newest first)
+  posts.sort((a, b) => {
+    if (!a.date || !b.date) return 0;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
+  return posts;
+}
+
+// Cache for loaded full posts
+const fullPostsCache = new Map<string, BlogPost>();
+
+/**
+ * Load a single post by ID - with caching
+ */
+export async function loadPostById(postId: string): Promise<BlogPost | null> {
+  // Check cache first
+  if (fullPostsCache.has(postId)) {
+    return fullPostsCache.get(postId)!;
+  }
+
+  for (const path in postModulesCache) {
+    try {
+      const content = (await postModulesCache[path]()) as string;
+      const { frontMatter } = parseFrontMatter(content);
+      
+      if (frontMatter.id === postId) {
+        const post = parseMarkdown(content);
+        fullPostsCache.set(postId, post);
+        return post;
+      }
+    } catch (error) {
+      console.error(`Error loading post from ${path}:`, error);
+    }
+  }
+
+  return null;
 }

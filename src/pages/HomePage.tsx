@@ -37,7 +37,7 @@ const HomePage = () => {
               <img 
                 src="/pfp.png" 
                 alt="Lohith Srikar"
-                className="w-24 h-24 rounded-full object-cover"
+                className="w-24 h-24 rounded-full object-cover shrink-0"
               />
               <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
                 Lohith Srikar

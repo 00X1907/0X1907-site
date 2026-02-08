@@ -22,5 +22,14 @@ export interface BlogPost {
   content: ContentBlock[];
 }
 
+// Lightweight metadata without content for sidebar/listing
+export interface PostMetadata {
+  id: string;
+  title: string;
+  category: string;
+  date?: string;
+  tags?: string[];
+}
+
 // Re-export the markdown loader for convenience
-export { loadMarkdownPosts } from "@/lib/markdown";
+export { loadMarkdownPosts, loadPostsMetadata, loadPostById } from "@/lib/markdown";
