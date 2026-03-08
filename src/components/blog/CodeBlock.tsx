@@ -19,8 +19,8 @@ export const CodeBlock = ({ code, language = "typescript", filename }: CodeBlock
     codeToHtml(code, {
       lang,
       themes: {
-        dark: "vitesse-dark",
-        light: "vitesse-light",
+        dark: "ayu-dark",
+        light: "ayu-dark",
       },
       defaultColor: false,
     }).then((html) => {
