@@ -13,6 +13,7 @@ export interface ContentBlock {
   calloutTitle?: string;
 }
 
+
 export interface BlogPost {
   id: string;
   title: string;

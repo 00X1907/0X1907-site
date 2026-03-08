@@ -1,22 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Check, Copy } from "lucide-react";
-import Prism from "prismjs";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-python";
-import "prismjs/components/prism-bash";
-import "prismjs/components/prism-json";
-import "prismjs/components/prism-css";
-import "prismjs/components/prism-jsx";
-import "prismjs/components/prism-tsx";
-import "prismjs/components/prism-sql";
-import "prismjs/components/prism-yaml";
-import "prismjs/components/prism-markdown";
-import "prismjs/components/prism-rust";
-import "prismjs/components/prism-go";
-import "prismjs/components/prism-c";
-import "prismjs/components/prism-cpp";
-import "prismjs/components/prism-nasm";
+import { codeToHtml, type BundledLanguage, bundledLanguages } from "shiki";
 
 interface CodeBlockProps {
   code: string;
@@ -26,12 +10,22 @@ interface CodeBlockProps {
 
 export const CodeBlock = ({ code, language = "typescript", filename }: CodeBlockProps) => {
   const [copied, setCopied] = useState(false);
-  const codeRef = useRef<HTMLElement>(null);
+  const [highlightedHtml, setHighlightedHtml] = useState<string>("");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (codeRef.current) {
-      Prism.highlightElement(codeRef.current);
-    }
+    const lang = language in bundledLanguages ? (language as BundledLanguage) : "text";
+
+    codeToHtml(code, {
+      lang,
+      themes: {
+        dark: "vitesse-dark",
+        light: "vitesse-light",
+      },
+      defaultColor: false,
+    }).then((html) => {
+      setHighlightedHtml(html);
+    });
   }, [code, language]);
 
   const handleCopy = async () => {
@@ -59,11 +53,11 @@ export const CodeBlock = ({ code, language = "typescript", filename }: CodeBlock
           </button>
         </div>
       </div>
-      <pre>
-        <code ref={codeRef} className={`language-${language}`}>
-          {code}
-        </code>
-      </pre>
+      <div
+        ref={containerRef}
+        className="shiki-container"
+        dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+      />
     </div>
   );
 };

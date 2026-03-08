@@ -180,7 +180,7 @@ export const BlogContent = ({ post }: BlogContentProps) => {
               )}
             </div>
             {post.content.map((block, index) => renderContentBlock(block, index))}
-            
+
             {/* Giscus Comments Section */}
             <GiscusComments />
           </article>
